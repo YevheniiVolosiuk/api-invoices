@@ -39,6 +39,11 @@ class InvoiceController extends Controller
         return new InvoiceResource(Invoice::create($request->all()));
     }
 
+    public function bulkStore(Request $request)
+    {
+
+    }
+
     /**
      * Display the specified resource.
      */

@@ -27,6 +27,7 @@ class UpdateCustomerRequest extends FormRequest
         if ($method == 'PUT') {
             return [
                 'firstName' => ['required'],
+                'lastName' => ['nullable'],
                 'type' => ['required', Rule::in(['I', 'B', 'i', 'b'])],
                 'email' => ['required', 'email'],
                 'phone' => ['required'],
@@ -38,6 +39,7 @@ class UpdateCustomerRequest extends FormRequest
         } else {
             return [
                 'firstName' => ['sometimes', 'required'],
+                'lastName' => ['sometimes','nullable'],
                 'type' => ['sometimes', 'required', Rule::in(['I', 'B', 'i', 'b'])],
                 'email' => ['sometimes', 'required', 'email'],
                 'phone' => ['sometimes', 'required'],

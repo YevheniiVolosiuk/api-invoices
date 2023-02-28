@@ -26,7 +26,7 @@ class CustomerResource extends JsonResource
             'city' => $this->city,
             'state' => $this->state,
             'postalCode' => $this->postal_code,
-            'createdDate' => $this->created_at->format('Y-m-d'),
+            'createdDate' => $this->created_at->format('Y-m-d H:i'),
 
             'invoices' => InvoiceResource::collection($this->whenLoaded('invoices')),
         ];

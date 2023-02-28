@@ -25,8 +25,9 @@ class StoreInvoiceRequest extends FormRequest
         return [
             'customerId' => ['required'],
             'amount' => ['required'],
-            'status' => ['required', Rule::in(['B', 'P', 'V'])],
-            'billedDate' => ['required'],
+            'status' => ['required', Rule::in(['B', 'P', 'V', 'b', 'p', 'v'])],
+            'billedDate' => ['required', 'date_format:Y-m-d H:i:s'],
+            'paidDate' => ['nullable', 'date_format:Y-m-d H:i:s'],
         ];
     }
 
@@ -35,6 +36,7 @@ class StoreInvoiceRequest extends FormRequest
         $this->merge([
             'customer_id' => $this->customerId,
             'billed_date' => $this->billedDate,
+            'paid_date' => $this->paidDate,
         ]);
     }
 }

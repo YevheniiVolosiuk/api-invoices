@@ -29,19 +29,21 @@ class UpdateInvoiceRequest extends FormRequest
                 'customerId' => ['required'],
                 'amount' => ['required'],
                 'status' => ['required', Rule::in(['B', 'P', 'V'])],
-                'billedDate' => ['required'],
+                'billedDate' => ['required', 'date_format:Y-m-d H:i:s'],
+                'paidDate' => ['nullable', 'date_format:Y-m-d H:i:s'],
             ];
         } else {
             return [
                 'customerId' => ['sometimes', 'required'],
                 'amount' => ['sometimes', 'required'],
-                'status' => ['sometimes', 'required', Rule::in(['B', 'P', 'V'])],
-                'billedDate' => ['sometimes', 'required'],
+                'status' => ['sometimes', 'required', Rule::in(['B', 'P', 'V', 'b', 'p', 'v'])],
+                'billedDate' => ['sometimes','required', 'date_format:Y-m-d H:i:s'],
+                'paidDate' => ['sometimes','nullable', 'date_format:Y-m-d H:i:s'],
             ];
         }
     }
 
-    protected function prepareForValidation()
+    protected function prepareForValidation(): Void
     {
         if (isset($this->customerId) || isset($this->billedDate) || isset($this->paidDate)) {
             $this->merge([
