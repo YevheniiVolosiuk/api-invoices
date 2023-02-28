@@ -5,7 +5,7 @@ namespace App\Http\Requests\V1;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class BulkStoreInvoiceRequest extends FormRequest
+class BulkStoreCustomerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +23,15 @@ class BulkStoreInvoiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            '*.customerId' => ['required', 'integer'],
-            '*.amount' => ['required', 'numeric'],
-            '*.status' => ['required', Rule::in(['B', 'P', 'V', 'b', 'p', 'v'])],
-            '*.billedDate' => ['required', 'date_format:Y-m-d H:i:s'],
-            '*.paidDate' => ['nullable', 'date_format:Y-m-d H:i:s'],
+            '*.firstName' => ['required'],
+            '*.lastName' => ['nullable'],
+            '*.type' => ['required', Rule::in(['I', 'B', 'i', 'b'])],
+            '*.email' => ['required', 'email'],
+            '*.phone' => ['required'],
+            '*.address' => ['required'],
+            '*.city' => ['required'],
+            '*.state' => ['required'],
+            '*.postalCode' => ['required'],
         ];
     }
 
@@ -36,9 +40,9 @@ class BulkStoreInvoiceRequest extends FormRequest
         $data = [];
 
         foreach ($this->toArray() as $obj){
-            $obj['customer_id'] = $obj['customerId'] ?? NULL;
-            $obj['billed_date'] = $obj['billedDate'] ?? NULL;
-            $obj['paid_date'] = $obj['paidDate'] ?? NULL;
+            $obj['first_name'] = $obj['firstName'] ?? NULL;
+            $obj['last_name'] = $obj['lastName'] ?? NULL;
+            $obj['postal_code'] = $obj['postalCode'] ?? NULL;
 
             $data[] = $obj;
         }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\BulkStoreCustomerRequest;
 use App\Http\Requests\V1\StoreCustomerRequest;
 use App\Http\Requests\V1\UpdateCustomerRequest;
 use App\Http\Resources\V1\CustomerCollection;
@@ -10,13 +11,14 @@ use App\Http\Resources\V1\CustomerResource;
 use App\Models\Customer;
 use App\Filters\V1\CustomerFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): CustomerCollection
     {
         $filter = new CustomerFilter();
         $filterItems = $filter->transform($request); // (['column', 'operator', 'value'])
@@ -41,10 +43,19 @@ class CustomerController extends Controller
         return new CustomerResource(Customer::create($request->all()));
     }
 
+    public function bulkStore(BulkStoreCustomerRequest $request): void
+    {
+        $bulk = collect($request->all())->map(function ($arr, $key) {
+            return Arr::except($arr, ['firstName', 'lastName', 'postalCode']);
+        });
+
+        Customer::insert($bulk->toArray());
+    }
+
     /**
      * Display the specified resource.
      */
-    public function show(Request $request,  Customer $customer)
+    public function show(Request $request,  Customer $customer): CustomerResource
     {
         $includeInvoice = $request->query('includeInvoices');
 
@@ -59,7 +70,7 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCustomerRequest $request, Customer $customer)
+    public function update(UpdateCustomerRequest $request, Customer $customer): void
     {
         $customer->update($request->all());
     }
