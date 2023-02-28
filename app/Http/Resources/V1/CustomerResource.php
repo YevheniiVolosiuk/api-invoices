@@ -29,8 +29,6 @@ class CustomerResource extends JsonResource
             'createdDate' => $this->created_at->format('Y-m-d'),
 
             'invoices' => InvoiceResource::collection($this->whenLoaded('invoices')),
-
-
         ];
     }
 }
